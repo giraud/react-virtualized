@@ -1,5 +1,5 @@
 {
-  "name": "react-virtualized",
+  "name": "@giraud/react-virtualized",
   "description": "React components for efficiently rendering large, scrollable lists and tabular data",
   "author": "Brian Vaughn <brian.david.vaughn@gmail.com>",
   "user": "bvaughn",
@@ -27,7 +27,6 @@
     "typecheck": "flow check",
     "prettier": "prettier --write '{playground,source,docs}/**/*.{js,md}'",
     "prettier:diff": "prettier --list-different '{playground,source,docs}/**/*.{js,md}'",
-    "postpublish": "yarn run deploy",
     "prepublishOnly": "yarn run build",
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --config webpack.config.dev.js",
     "test": "yarn run test:jest",
@@ -36,18 +35,13 @@
     "watch": "watch 'clear && yarn run test -s' source",
     "watch:jest": "jest --no-watchman --watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "files": [
     "dist",
     "styles.css"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bvaughn/react-virtualized.git"
+    "url": "https://github.com/giraud/react-virtualized.git"
   },
   "keywords": [
     "react",
