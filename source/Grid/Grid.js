@@ -35,6 +35,14 @@ import {
   cancelAnimationTimeout,
 } from '../utils/requestAnimationTimeout';
 
+function defaultHeaderRangeRenderer(_props) {
+  return null;
+}
+
+function defaultFooterRangeRenderer(_props) {
+  return null;
+}
+
 /**
  * Specifies the number of milliseconds during which to disable pointer events while a scroll is in progress.
  * This improves performance and makes scrolling smoother.
@@ -84,6 +92,12 @@ type Props = {
 
   /** Responsible for rendering a group of cells given their index ranges.  */
   cellRangeRenderer: CellRangeRenderer,
+
+  /** Responsible for rendering a fixed header */
+  headerRangeRenderer: CellRangeRenderer,
+
+  /** Responsible for rendering a fixed footer */
+  footerRangeRenderer: CellRangeRenderer,
 
   /** Optional custom CSS class name to attach to root Grid element.  */
   className?: string,
@@ -263,6 +277,8 @@ class Grid extends React.PureComponent<Props, State> {
     autoHeight: false,
     autoWidth: false,
     cellRangeRenderer: defaultCellRangeRenderer,
+    headerRangeRenderer: defaultHeaderRangeRenderer,
+    footerRangeRenderer: defaultFooterRangeRenderer,
     containerRole: 'row',
     containerStyle: {},
     estimatedColumnSize: 100,
@@ -1035,6 +1051,8 @@ class Grid extends React.PureComponent<Props, State> {
       totalRowsHeight + horizontalScrollBarSize <= height ? 'hidden' : 'auto';
 
     const childrenToDisplay = this._childrenToDisplay;
+    const headerToDisplay = this._headerToDisplay;
+    const footerToDisplay = this._footerToDisplay;
 
     const showNoContentRenderer =
       childrenToDisplay.length === 0 && height > 0 && width > 0;
@@ -1068,7 +1086,9 @@ class Grid extends React.PureComponent<Props, State> {
               position: 'relative',
               ...containerStyle,
             }}>
+            {headerToDisplay}
             {childrenToDisplay}
+            {footerToDisplay}
           </div>
         )}
         {showNoContentRenderer && noContentRenderer()}
@@ -1085,6 +1105,8 @@ class Grid extends React.PureComponent<Props, State> {
     const {
       cellRenderer,
       cellRangeRenderer,
+      headerRangeRenderer,
+      footerRangeRenderer,
       columnCount,
       deferredMeasurementCache,
       height,
@@ -1110,6 +1132,8 @@ class Grid extends React.PureComponent<Props, State> {
     const isScrolling = this._isScrolling(props, state);
 
     this._childrenToDisplay = [];
+    this._headerToDisplay = null;
+    this._footerToDisplay = null;
 
     // Render only enough columns and rows to cover the visible area of the grid.
     if (height > 0 && width > 0) {
@@ -1221,6 +1245,52 @@ class Grid extends React.PureComponent<Props, State> {
       }
 
       this._childrenToDisplay = cellRangeRenderer({
+        cellCache: this._cellCache,
+        cellRenderer,
+        columnSizeAndPositionManager:
+          instanceProps.columnSizeAndPositionManager,
+        columnStartIndex,
+        columnStopIndex,
+        deferredMeasurementCache,
+        horizontalOffsetAdjustment,
+        isScrolling,
+        isScrollingOptOut,
+        parent: this,
+        rowSizeAndPositionManager: instanceProps.rowSizeAndPositionManager,
+        rowStartIndex,
+        rowStopIndex,
+        scrollLeft,
+        scrollTop,
+        styleCache: this._styleCache,
+        verticalOffsetAdjustment,
+        visibleColumnIndices,
+        visibleRowIndices,
+      });
+
+      this._headerToDisplay = headerRangeRenderer({
+        cellCache: this._cellCache,
+        cellRenderer,
+        columnSizeAndPositionManager:
+          instanceProps.columnSizeAndPositionManager,
+        columnStartIndex,
+        columnStopIndex,
+        deferredMeasurementCache,
+        horizontalOffsetAdjustment,
+        isScrolling,
+        isScrollingOptOut,
+        parent: this,
+        rowSizeAndPositionManager: instanceProps.rowSizeAndPositionManager,
+        rowStartIndex,
+        rowStopIndex,
+        scrollLeft,
+        scrollTop,
+        styleCache: this._styleCache,
+        verticalOffsetAdjustment,
+        visibleColumnIndices,
+        visibleRowIndices,
+      });
+
+      this._footerToDisplay = footerRangeRenderer({
         cellCache: this._cellCache,
         cellRenderer,
         columnSizeAndPositionManager:

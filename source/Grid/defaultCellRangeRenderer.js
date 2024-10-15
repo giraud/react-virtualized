@@ -24,6 +24,7 @@ export default function defaultCellRangeRenderer({
   rowStopIndex,
   styleCache,
   verticalOffsetAdjustment,
+  headerOffsetAdjustment,
   visibleColumnIndices,
   visibleRowIndices,
 }: CellRangeRendererParams) {
@@ -84,7 +85,7 @@ export default function defaultCellRangeRenderer({
             height: rowDatum.size,
             left: columnDatum.offset + horizontalOffsetAdjustment,
             position: 'absolute',
-            top: rowDatum.offset + verticalOffsetAdjustment,
+            top: rowDatum.offset + verticalOffsetAdjustment + (headerOffsetAdjustment ? headerOffsetAdjustment : 0),
             width: columnDatum.size,
           };
 

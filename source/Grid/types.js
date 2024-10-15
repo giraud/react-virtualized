@@ -38,6 +38,7 @@ export type CellRangeRendererParams = {
   scrollTop: number,
   styleCache: StyleCache,
   verticalOffsetAdjustment: number,
+  headerOffsetAdjustment: number,
   visibleColumnIndices: Object,
   visibleRowIndices: Object,
 };
