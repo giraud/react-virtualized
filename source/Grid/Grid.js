@@ -99,6 +99,12 @@ type Props = {
   /** Responsible for rendering a fixed footer */
   footerRangeRenderer: CellRangeRenderer,
 
+  /** Height of the header */
+  headerHeight?: number,
+
+  /** Height of the footer */
+  footerHeight?: number,
+
   /** Optional custom CSS class name to attach to root Grid element.  */
   className?: string,
 
@@ -279,6 +285,8 @@ class Grid extends React.PureComponent<Props, State> {
     cellRangeRenderer: defaultCellRangeRenderer,
     headerRangeRenderer: defaultHeaderRangeRenderer,
     footerRangeRenderer: defaultFooterRangeRenderer,
+    headerHeight: 0,
+    footerHeight: 0,
     containerRole: 'row',
     containerStyle: {},
     estimatedColumnSize: 100,
@@ -992,6 +1000,8 @@ class Grid extends React.PureComponent<Props, State> {
       style,
       tabIndex,
       width,
+      headerHeight,
+      footerHeight
     } = this.props;
     const {instanceProps, needToResetStyleCache} = this.state;
 
@@ -1048,7 +1058,7 @@ class Grid extends React.PureComponent<Props, State> {
     gridStyle.overflowX =
       totalColumnsWidth + verticalScrollBarSize <= width ? 'hidden' : 'auto';
     gridStyle.overflowY =
-      totalRowsHeight + horizontalScrollBarSize <= height ? 'hidden' : 'auto';
+      totalRowsHeight + (headerHeight ? headerHeight : 0) + horizontalScrollBarSize <= height - (footerHeight ? footerHeight : 0) ? 'hidden' : 'auto';
 
     const childrenToDisplay = this._childrenToDisplay;
     const headerToDisplay = this._headerToDisplay;
@@ -1116,6 +1126,7 @@ class Grid extends React.PureComponent<Props, State> {
       rowCount,
       width,
       isScrollingOptOut,
+      headerHeight,
     } = props;
 
     const {
@@ -1263,6 +1274,7 @@ class Grid extends React.PureComponent<Props, State> {
         scrollTop,
         styleCache: this._styleCache,
         verticalOffsetAdjustment,
+        headerOffsetAdjustment: headerHeight,
         visibleColumnIndices,
         visibleRowIndices,
       });
